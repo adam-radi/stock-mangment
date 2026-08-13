@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Stock App"
+description = "A local inventory management app for products, stock movements, sales, history, and printable receipts."
+version = "1.0.0"
+id = "artifacts/stock-app"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24351
+
+[services.development]
+run = "python app.py"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/stock-app", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/stock-app/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24351"
+BASE_PATH = "/"
